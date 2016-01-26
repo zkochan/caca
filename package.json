@@ -1,0 +1,48 @@
+{
+  "name": "caca",
+  "version": "0.0.0",
+  "description": "A cli tool for CA.",
+  "files": [
+    "index.js"
+  ],
+  "bin": {
+    "ca": "./bin/ca.js"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/{**/,/}*.js",
+    "coverage": "istanbul cover _mocha test/{**/,/}*.js -- -R spec",
+    "precoveralls": "istanbul cover _mocha test/{**/,/}*.js --report lcovonly -- -R spec && npm i coveralls@2",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "postcoveralls": "rm -rf ./coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zkochan/caca"
+  },
+  "keywords": [
+    "ca",
+    "cli"
+  ],
+  "author": {
+    "name": "Zoltan Kochan",
+    "email": "zoltan.kochan@gmail.com",
+    "url": "http://kochan.io"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zkochan/caca/issues"
+  },
+  "homepage": "https://github.com/zkochan/caca#readme",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "configstore": "^1.4.0",
+    "rally": "^0.2.0",
+    "update-notifier": "^0.6.0"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "istanbul": "^0.4.2",
+    "mocha": "^2.3.4"
+  }
+}
