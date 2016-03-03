@@ -16,6 +16,18 @@ npm install -g caca
 
 ## Available commands
 
+
+### ca api <api key>
+
+Sets the API key that will be used to communicate with Rally. Other commands won't work without an API key.
+
+**Usage example**
+
+```
+$ ca api _023djief03fh34ASjfwe0f2jASojsasf0
+```
+
+
 ### ca open
 
 Opens the current Rally story/defect in the browser. The story ID is taken from the current branch name.
