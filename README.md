@@ -23,9 +23,9 @@ Opens the current Rally story/defect in the browser. The story ID is taken from 
 **Usage example**
 
 ```
-# when on branch john-ja123
+# when on branch john-US123
 $ ca open
-# opens story JA123 in the browser
+# opens story US123 in the browser
 ```
 
 
@@ -36,8 +36,8 @@ Opens the specified Rally story/defect in the browser.
 **Usage example**
 
 ```
-$ ca open JA53439
-# opens the story JA53439 in the browser
+$ ca open US53439
+# opens the story US53439 in the browser
 
 ca open DE92342
 # opens the defect DE92342 in the browser

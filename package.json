@@ -35,5 +35,8 @@
     "open": "0.0.5",
     "rally": "^0.2.0",
     "update-notifier": "^0.6.0"
+  },
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org"
   }
 }
