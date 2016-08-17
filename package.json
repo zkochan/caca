@@ -3,7 +3,8 @@
   "version": "0.1.1",
   "description": "A cli tool for CA.",
   "files": [
-    "index.js"
+    "bin/",
+    "lib/"
   ],
   "bin": {
     "ca": "./bin/ca.js"
