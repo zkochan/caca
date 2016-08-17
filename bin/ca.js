@@ -8,6 +8,7 @@ const printTasks = require('../lib/print-tasks')
 const currentStory = require('current-story')
 const Configstore = require('configstore')
 const conf = new Configstore('ca')
+require('loud-rejection')()
 
 updateNotifier({ pkg }).notify({ defer: false })
 

@@ -37,6 +37,7 @@
     "git-repo-name": "^0.6.0",
     "git-user-email": "^0.2.1",
     "lodash": "^4.15.0",
+    "loud-rejection": "^1.6.0",
     "open": "0.0.5",
     "rally": "^0.2.0",
     "update-notifier": "^0.6.0"
