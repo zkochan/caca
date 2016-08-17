@@ -29,9 +29,13 @@
   },
   "homepage": "https://github.com/zkochan/caca#readme",
   "dependencies": {
+    "better-console": "^0.2.4",
     "commander": "^2.9.0",
     "configstore": "^1.4.0",
     "current-story": "^1.0.0",
+    "git-repo-name": "^0.6.0",
+    "git-user-email": "^0.2.1",
+    "lodash": "^4.15.0",
     "open": "0.0.5",
     "rally": "^0.2.0",
     "update-notifier": "^0.6.0"
