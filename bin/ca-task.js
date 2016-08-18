@@ -1,5 +1,6 @@
 'use strict'
 const program = require('commander')
+const currentStory = require('current-story')
 const printTasks = require('../lib/print-tasks')
 
 program
@@ -12,10 +13,10 @@ program
   .command('new [artifactId] [taskName] [state] [estimate] [actuals]')
   .description('Adds a new task to a story/defect')
   .action((artifactId, taskName, state, estimate, actuals) => {
-    const getBacklogItem = require('../lib/get-backlog-item');
-    const createTask = require('../lib/create-task');
-    const getState = require('../lib/task-state-mapper');
-    let create = function(artifact, user){
+    const getBacklogItem = require('../lib/get-backlog-item')
+    const createTask = require('../lib/create-task')
+    const getState = require('../lib/task-state-mapper')
+    let create = function (artifact, user) {
       let data = {
         name: taskName,
         projectRef: artifact.Project._ref,
@@ -25,34 +26,34 @@ program
       if (user && user._ref) {
         data.userRef = user._ref
       }
-      if (state && typeof(state) == 'string') {
+      if (state && typeof state === 'string') {
         data.state = getState(state)
       }
-      if (estimate){
-        data.estimate = parseFloat(estimate);
+      if (estimate) {
+        data.estimate = parseFloat(estimate)
       }
-      if (actuals){
-        data.actuals = parseFloat(actuals);
+      if (actuals) {
+        data.actuals = parseFloat(actuals)
       }
-      createTask(data).then((taskInfo)=>{
-        console.log('New task:');
-        console.log(taskInfo.Object.FormattedID + '. ' + taskInfo.Object.Name);
-      }).catch(err => console.log)
+      createTask(data).then((taskInfo) => {
+        console.log('New task:')
+        console.log(taskInfo.Object.FormattedID + '. ' + taskInfo.Object.Name)
+      })
+      .catch(err => console.log(err))
     }
 
     getBacklogItem(artifactId).then((artifact) => {
-      const getUserByEmail = require('../lib/get-user-by-email');
-      const getEmail = require('git-user-email');
-      let email;
+      const getUserByEmail = require('../lib/get-user-by-email')
+      const getEmail = require('git-user-email')
+      let email
       try {
-        email = getEmail();
-      }
-      catch (err) {
+        email = getEmail()
+      } catch (err) {
         console.log('Failed to get current user email. Create a task without the owner')
         create(artifact)
       }
 
-      getUserByEmail(email).then((user)=>{
+      getUserByEmail(email).then((user) => {
         create(artifact, user)
       })
     })
@@ -62,7 +63,6 @@ program
   .command('new-merge [taskPrefix]')
   .description('Adds a new merge task to a story/defect')
   .action(taskPrefix => {
-    const getArtifact = require('../lib/get-artifact')
     const getBacklogItem = require('../lib/get-backlog-item')
     const getUserByEmail = require('../lib/get-user-by-email')
     const printTasks = require('../lib/print-tasks')
@@ -71,10 +71,9 @@ program
     const email = require('git-user-email')()
 
     const _ = require('lodash')
-    const object = require('lodash/fp/object')
 
     let createMergeTask = (artifact, name) => {
-      getUserByEmail(email).then((user)=>{
+      getUserByEmail(email).then((user) => {
         return createTask({
           name: name,
           projectRef: artifact.Project._ref,
@@ -82,7 +81,7 @@ program
           userRef: user._ref,
           fetch: ['FormattedID', 'Name']
         })
-      }).then((taskInfo)=>{
+      }).then((taskInfo) => {
         console.log('Merge Task created for you to not forget:')
         console.log(taskInfo.Object.FormattedID + '. ' + taskInfo.Object.Name)
       })
@@ -92,17 +91,17 @@ program
 
     currentStory().then((itemId) => {
       if (!itemId) {
-        console.log('item not found. terminating');
-        return;
+        console.log('item not found. terminating')
+        return
       }
       return getBacklogItem(itemId).then((artifact) => {
         printTasks().then(tasks => {
           if (_.find(tasks, ['Name', taskName])) {
             console.log('Merge task already exists. Lucky you!')
-            return;
+            return
           }
           createMergeTask(artifact, taskName)
-        });
+        })
       })
     })
   })
@@ -123,15 +122,15 @@ program
     }).then(tasks => {
       let data = {
         ref: tasks.Results[0]._ref
-      };
-      if (state && typeof(state) == 'string') {
+      }
+      if (state && typeof state === 'string') {
         data.state = getState(state)
       }
-      if (actuals){
+      if (actuals) {
         data.actuals = parseFloat(actuals)
       }
       updateTask(data)
     })
   })
 
-program.parse(process.argv);
+program.parse(process.argv)
