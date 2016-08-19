@@ -1,7 +1,17 @@
 'use strict'
 const program = require('commander')
 const currentStory = require('current-story')
+const getEmail = require('git-user-email')
+const _ = require('lodash')
+const repoName = require('git-repo-name')
+const rally = require('rally')
 const printTasks = require('../lib/print-tasks')
+const getBacklogItem = require('../lib/get-backlog-item')
+const createTask = require('../lib/create-task')
+const getState = require('../lib/task-state-mapper')
+const getUserByEmail = require('../lib/get-user-by-email')
+const updateTask = require('../lib/update-task')
+const getArtifact = require('../lib/get-artifact')
 
 program
   .command('list [formattedId]')
@@ -13,11 +23,8 @@ program
   .command('new [artifactId] [taskName] [state] [estimate] [actuals]')
   .description('Adds a new task to a story/defect')
   .action((artifactId, taskName, state, estimate, actuals) => {
-    const getBacklogItem = require('../lib/get-backlog-item')
-    const createTask = require('../lib/create-task')
-    const getState = require('../lib/task-state-mapper')
-    let create = function (artifact, user) {
-      let data = {
+    const create = function (artifact, user) {
+      const data = {
         name: taskName,
         projectRef: artifact.Project._ref,
         artifactRef: artifact._ref,
@@ -43,8 +50,6 @@ program
     }
 
     getBacklogItem(artifactId).then((artifact) => {
-      const getUserByEmail = require('../lib/get-user-by-email')
-      const getEmail = require('git-user-email')
       let email
       try {
         email = getEmail()
@@ -63,16 +68,9 @@ program
   .command('new-merge [taskPrefix]')
   .description('Adds a new merge task to a story/defect')
   .action(taskPrefix => {
-    const getBacklogItem = require('../lib/get-backlog-item')
-    const getUserByEmail = require('../lib/get-user-by-email')
-    const printTasks = require('../lib/print-tasks')
-    const repoName = require('git-repo-name')
-    const createTask = require('../lib/create-task')
-    const email = require('git-user-email')()
+    const email = getEmail()
 
-    const _ = require('lodash')
-
-    let createMergeTask = (artifact, name) => {
+    function createMergeTask (artifact, name) {
       getUserByEmail(email).then((user) => {
         return createTask({
           name: name,
@@ -87,7 +85,7 @@ program
       })
     }
 
-    let taskName = taskPrefix + ' ' + repoName.sync()
+    const taskName = taskPrefix + ' ' + repoName.sync()
 
     currentStory().then((itemId) => {
       if (!itemId) {
@@ -110,11 +108,7 @@ program
   .command('update [formattedId] [status] [actuals]')
   .description('Updates status and actuals of the task')
   .action((formattedId, state, actuals) => {
-    const getArtifact = require('../lib/get-artifact')
-    const rally = require('rally')
     const queryUtils = rally.util.query
-    const getState = require('../lib/task-state-mapper')
-    const updateTask = require('../lib/update-task')
 
     getArtifact({
       type: 'task',
