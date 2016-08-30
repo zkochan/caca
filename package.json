@@ -1,6 +1,6 @@
 {
   "name": "caca",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "A CLI tool for CA",
   "files": [
     "bin/",
