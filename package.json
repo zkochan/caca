@@ -29,6 +29,10 @@
     "email": "zoltan.kochan@gmail.com",
     "url": "http://kochan.io"
   },
+  "contributors": [{
+    "name": "Vitaliy Stanyshevskyy",
+    "email": "stvitaliyvskiy@gmail.com"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zkochan/caca/issues"
