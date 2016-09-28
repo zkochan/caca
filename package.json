@@ -1,6 +1,6 @@
 {
   "name": "caca",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI tool for CA",
   "files": [
     "bin/",
@@ -29,10 +29,12 @@
     "email": "zoltan.kochan@gmail.com",
     "url": "http://kochan.io"
   },
-  "contributors": [{
-    "name": "Vitaliy Stanyshevskyy",
-    "email": "stvitaliyvskiy@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "Vitaliy Stanyshevskyy",
+      "email": "stvitaliyvskiy@gmail.com"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zkochan/caca/issues"
