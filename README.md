@@ -10,9 +10,14 @@
 
 - [Installation](#installation)
 - [Available commands](#available-commands)
+  - [ca --help](#ca---help)
+  - [ca task --help](#ca-task---help)
   - [ca api \[api key\]](#ca-api-api-key)
   - [ca open](#ca-open)
   - [ca open \[formatted ID\]](#ca-open-formatted-id)
+  - [ca task list \[formatted ID\]](#ca-task-list-formatted-id)
+  - [ca task update \[formatted ID\] \[status\] \[actuals\]](#ca-task-update-formatted-id-status-actuals)
+  - [ca task new \[formatted story/defect ID\] \[taskName\] \[state\] \[estimate\] \[actuals\]](#ca-task-new-formatted-storydefect-id-taskname-state-estimate-actuals)
 - [License](#license)
 
 ## Installation
