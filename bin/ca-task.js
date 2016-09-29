@@ -43,7 +43,7 @@ program
         data.actuals = parseFloat(actuals)
       }
       createTask(data).then((taskInfo) => {
-        printTasks(taskInfo.Object.WorkProduct.FormattedID);
+        printTasks(taskInfo.Object.WorkProduct.FormattedID)
       })
       .catch(err => console.log(err))
     }
