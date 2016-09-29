@@ -15,6 +15,7 @@
   - [ca api \[api key\]](#ca-api-api-key)
   - [ca open](#ca-open)
   - [ca open \[formatted ID\]](#ca-open-formatted-id)
+- [Tasks](#tasks)
   - [ca task list \[formatted ID\]](#ca-task-list-formatted-id)
   - [ca task update \[formatted ID\] \[status\] \[actuals\]](#ca-task-update-formatted-id-status-actuals)
   - [ca task new \[formatted story/defect ID\] \[taskName\] \[state\] \[estimate\] \[actuals\]](#ca-task-new-formatted-storydefect-id-taskname-state-estimate-actuals)
@@ -51,7 +52,6 @@ $ ca --help
 
     -h, --help     output usage information
     -V, --version  output the version number
-
 ```
 
 ### `ca task --help`
@@ -147,9 +147,10 @@ $ ca task ls US53439
 
 Updates status and actuals of the task
 Possible [status] options:
-* d - defined
-* p - In-Progress
-* c - Completed
+
+- d - defined
+- p - In-Progress
+- c - Completed
 
 **Usage example**
 
@@ -171,7 +172,6 @@ $ ca task new US53439 "dev" c 20 4
 │ TA95062     │ dev     │ Completed │ 4       │ John Doe    │
 └─────────────┴─────────┴───────────┴─────────┴─────────────┘
 ```
-
 
 ## License
 
