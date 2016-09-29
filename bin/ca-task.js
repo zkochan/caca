@@ -28,7 +28,7 @@ program
         name: taskName,
         projectRef: artifact.Project._ref,
         artifactRef: artifact._ref,
-        fetch: ['FormattedID', 'Name']
+        fetch: ['FormattedID', 'Name', 'WorkProduct']
       }
       if (user && user._ref) {
         data.userRef = user._ref
@@ -43,8 +43,7 @@ program
         data.actuals = parseFloat(actuals)
       }
       createTask(data).then((taskInfo) => {
-        console.log('New task:')
-        console.log(taskInfo.Object.FormattedID + '. ' + taskInfo.Object.Name)
+        printTasks(taskInfo.Object.WorkProduct.FormattedID);
       })
       .catch(err => console.log(err))
     }

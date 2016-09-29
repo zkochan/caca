@@ -42,6 +42,7 @@
   "homepage": "https://github.com/zkochan/caca#readme",
   "dependencies": {
     "better-console": "^0.2.4",
+    "cli-table2": "^0.2.0",
     "commander": "^2.9.0",
     "configstore": "^1.4.0",
     "current-story": "^1.0.0",

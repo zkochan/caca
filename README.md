@@ -124,17 +124,17 @@ Prints out list of tasks added to the specified Rally story/defect in the CLI
 
 ```sh
 $ ca task list US53439
-┌─────────┬─────────────┬─────────┬───────────┬─────────┬─────────────┐
-│(index)  │ FormattedID │ Name    │ State     │ Actuals │ Owner       │
-├─────────┼─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ 0       │ TA95062     │ Dev     │ Completed │ 2       │ John Doe    │
-├─────────┼─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ 1       │ TA95147     │ merge   │ Completed │ 0.1     │ John Doe    │
-├─────────┼─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ 2       │ TA95180     │ QA      │ Completed │ 6       │ Jane Doe    │
-├─────────┼─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ 3       │ TA95232     │ CR      │ Completed │ 0.1     │ Richard Roe │
-└─────────┴─────────────┴─────────┴───────────┴─────────┴─────────────┘
+┌─────────────┬─────────┬───────────┬─────────┬─────────────┐
+│ FormattedID │ Name    │ State     │ Actuals │ Owner       │
+├─────────────┼─────────┼───────────┼─────────┼─────────────┤
+│ TA95062     │ Dev     │ Completed │ 2       │ John Doe    │
+├─────────────┼─────────┼───────────┼─────────┼─────────────┤
+│ TA95147     │ merge   │ Completed │ 0.1     │ John Doe    │
+├─────────────┼─────────┼───────────┼─────────┼─────────────┤
+│ TA95180     │ QA      │ Completed │ 6       │ Jane Doe    │
+├─────────────┼─────────┼───────────┼─────────┼─────────────┤
+│ TA95232     │ CR      │ Completed │ 0.1     │ Richard Roe │
+└─────────────┴─────────┴───────────┴─────────┴─────────────┘
 ```
 
 or
@@ -159,12 +159,17 @@ $ ca task update TA95062 c 2
 
 ### `ca task new [formatted story/defect ID] [taskName] [state] [estimate] [actuals]`
 
-Adds a new task to a story/defect
+Adds a new task to a story/defect and prints the list of tasks after new one was created
 
 **Usage example**
 
 ```sh
-$ ca task new US53439 "development" c 20 4
+$ ca task new US53439 "dev" c 20 4
+┌─────────────┬─────────┬───────────┬─────────┬─────────────┐
+│ FormattedID │ Name    │ State     │ Actuals │ Owner       │
+├─────────────┼─────────┼───────────┼─────────┼─────────────┤
+│ TA95062     │ dev     │ Completed │ 4       │ John Doe    │
+└─────────────┴─────────┴───────────┴─────────┴─────────────┘
 ```
 
 
