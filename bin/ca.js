@@ -28,7 +28,13 @@ program
   .description('Opens the specified defect or story')
   .action(id => {
     if (!id) {
-      currentStory().then(openStory)
+      currentStory().then(id => {
+        if (!id) {
+          console.log('Failed to identify the story ID from branch name')
+          return
+        }
+        openStory(id)
+      })
       return
     }
 
