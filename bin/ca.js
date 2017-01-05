@@ -6,7 +6,9 @@ const updateNotifier = require('update-notifier')
 const openStory = require('../lib/open-story')
 const currentStory = require('current-story')
 const Configstore = require('configstore')
+const inquirer = require('inquirer')
 const conf = new Configstore('ca')
+const promtForArtifactId = require('../lib/promt-for-artifact-id')
 require('loud-rejection')()
 
 updateNotifier({ pkg }).notify({ defer: false })
@@ -24,21 +26,14 @@ program
   })
 
 program
-  .command('open [id]')
+  .command('open')
   .description('Opens the specified defect or story')
-  .action(id => {
-    if (!id) {
-      currentStory().then(id => {
-        if (!id) {
-          console.log('Failed to identify the story ID from branch name')
-          return
-        }
-        openStory(id)
-      })
-      return
-    }
-
-    openStory(id)
+  .action(() => {
+    currentStory().then(id => {
+      return inquirer.prompt([promtForArtifactId(id)])
+    }).then(answers => {
+      answers.id && openStory(answers.id)
+    })
   })
 
 program.parse(process.argv)

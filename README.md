@@ -14,11 +14,10 @@
   - [ca task --help](#ca-task---help)
   - [ca api \[api key\]](#ca-api-api-key)
   - [ca open](#ca-open)
-  - [ca open \[formatted ID\]](#ca-open-formatted-id)
 - [Tasks](#tasks)
-  - [ca task list \[formatted ID\]](#ca-task-list-formatted-id)
+  - [ca task list](#ca-task-list-formatted-id)
   - [ca task update \[formatted ID\] \[status\] \[actuals\]](#ca-task-update-formatted-id-status-actuals)
-  - [ca task new \[formatted story/defect ID\] \[taskName\] \[state\] \[estimate\] \[actuals\]](#ca-task-new-formatted-storydefect-id-taskname-state-estimate-actuals)
+  - [ca task new](#ca-task-new-formatted-storydefect-id-taskname-state-estimate-actuals)
 - [License](#license)
 
 ## Installation
@@ -45,7 +44,7 @@ $ ca --help
 
     task          do something with tasks
     api [apiKey]  Sets the CA API key
-    open [id]     Opens the specified defect or story
+    open          Opens the specified defect or story
     help [cmd]    display help for [cmd]
 
   Options:
@@ -90,58 +89,13 @@ $ ca api _023djief03fh34ASjfwe0f2jASojsasf0
 
 ### `ca open`
 
-Opens the current Rally story/defect in the browser. The story ID is taken from the current branch name.
-
-**Usage example**
-
-```sh
-# when on branch john-US123
-$ ca open
-# opens story US123 in the browser
-```
-
-### `ca open [formatted ID]`
-
-Opens the specified Rally story/defect in the browser.
-
-**Usage example**
-
-```sh
-$ ca open US53439
-# opens the story US53439 in the browser
-
-ca open DE92342
-# opens the defect DE92342 in the browser
-```
+Opens the Rally story/defect in the browser based on git branch name or user input.
 
 ## Tasks
 
-### `ca task list [formatted ID]`
+### `ca task list`
 
-Prints out list of tasks added to the specified Rally story/defect in the CLI
-
-**Usage example**
-
-```sh
-$ ca task list US53439
-┌─────────────┬─────────┬───────────┬─────────┬─────────────┐
-│ FormattedID │ Name    │ State     │ Actuals │ Owner       │
-├─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ TA95062     │ Dev     │ Completed │ 2       │ John Doe    │
-├─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ TA95147     │ merge   │ Completed │ 0.1     │ John Doe    │
-├─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ TA95180     │ QA      │ Completed │ 6       │ Jane Doe    │
-├─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ TA95232     │ CR      │ Completed │ 0.1     │ Richard Roe │
-└─────────────┴─────────┴───────────┴─────────┴─────────────┘
-```
-
-or
-
-```sh
-$ ca task ls US53439
-```
+Prints out list of tasks added to the Rally story/defect in the CLI
 
 ### `ca task update [formatted ID] [status] [actuals]`
 
@@ -158,20 +112,9 @@ Possible [status] options:
 $ ca task update TA95062 c 2
 ```
 
-### `ca task new [formatted story/defect ID] [taskName] [state] [estimate] [actuals]`
+### `ca task new`
 
-Adds a new task to a story/defect and prints the list of tasks after new one was created
-
-**Usage example**
-
-```sh
-$ ca task new US53439 "dev" c 20 4
-┌─────────────┬─────────┬───────────┬─────────┬─────────────┐
-│ FormattedID │ Name    │ State     │ Actuals │ Owner       │
-├─────────────┼─────────┼───────────┼─────────┼─────────────┤
-│ TA95062     │ dev     │ Completed │ 4       │ John Doe    │
-└─────────────┴─────────┴───────────┴─────────┴─────────────┘
-```
+Adds a new task to a story/defect and prints the list of tasks after new one was created. Asks for task details (name, state, actuals, owner) in step-by-step process
 
 ## License
 

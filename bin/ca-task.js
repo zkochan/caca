@@ -12,54 +12,108 @@ const getState = require('../lib/task-state-mapper')
 const getUserByEmail = require('../lib/get-user-by-email')
 const updateTask = require('../lib/update-task')
 const getArtifact = require('../lib/get-artifact')
+const promtForArtifactId = require('../lib/promt-for-artifact-id')
+const inquirer = require('inquirer')
 
 program
-  .command('list [formattedId]')
+  .command('list')
   .alias('ls')
   .description('Prints the list of tasks of the story/defect')
-  .action(formattedId => printTasks(formattedId))
+  .action(() => {
+    currentStory().then(defaultId => {
+      return inquirer.prompt([promtForArtifactId(defaultId)])
+    }).then(answers => {
+      answers.id && printTasks(answers.id)
+    }).catch(e => {
+      console.log(e)
+    })
+  })
 
 program
-  .command('new [artifactId] [taskName] [state] [estimate] [actuals]')
+  .command('new')
   .description('Adds a new task to a story/defect')
-  .action((artifactId, taskName, state, estimate, actuals) => {
-    const create = function (artifact, user) {
-      const data = {
-        name: taskName,
+  .action(() => {
+    let artifact
+    let email
+
+    Promise.all([currentStory(), getEmail()]).then((values) => {
+      email = values[1]
+      return inquirer.prompt([promtForArtifactId(values[0])])
+    }).then(answers => {
+      return getBacklogItem(answers.id)
+    }).then(_artifact => {
+      artifact = _artifact
+      return getArtifact({
+        type: 'TeamMembers',
+        ref: artifact.Project.TeamMembers._ref,
+        fetch: ['UserName', 'FirstName', 'MiddleName', 'LastName', 'DisplayName', 'EmailAddress']
+      })
+    }).then(usersData => {
+      var users = usersData.Results
+      return inquirer.prompt([
+        {
+          type: 'input',
+          name: 'name',
+          message: 'Task name:',
+          default: 'Dev',
+          validate: value => {
+            return value.trim() ? true : 'Please enter a valid task name'
+          }
+        },
+        {
+          type: 'list',
+          name: 'owner',
+          message: 'Task owner:',
+          default: users.indexOf(users.find(u => u.EmailAddress === email)),
+          choices: users.map(u => {
+            return {
+              name: u._refObjectName,
+              value: u._ref,
+              checked: u.EmailAddress === email
+            }
+          })
+        },
+        {
+          type: 'list',
+          name: 'state',
+          message: 'Task state:',
+          choices: ['Defined', 'In-Progress', 'Completed'],
+          default: 0
+        },
+        {
+          type: 'input',
+          name: 'estimate',
+          message: 'Task estimate:',
+          default: 0.5,
+          filter: function (value) {
+            return parseFloat(value) || 0
+          }
+        },
+        {
+          type: 'input',
+          name: 'actuals',
+          message: 'Task actuals:',
+          default: 0,
+          filter: function (value) {
+            return parseFloat(value) || 0
+          }
+        }
+      ])
+    }).then(answers => {
+      return createTask({
+        name: answers.name,
         projectRef: artifact.Project._ref,
         artifactRef: artifact._ref,
-        fetch: ['FormattedID', 'Name', 'WorkProduct']
-      }
-      if (user && user._ref) {
-        data.userRef = user._ref
-      }
-      if (state && typeof state === 'string') {
-        data.state = getState(state)
-      }
-      if (estimate) {
-        data.estimate = parseFloat(estimate)
-      }
-      if (actuals) {
-        data.actuals = parseFloat(actuals)
-      }
-      createTask(data).then((taskInfo) => {
-        printTasks(taskInfo.Object.WorkProduct.FormattedID)
+        fetch: ['FormattedID', 'Name', 'WorkProduct'],
+        userRef: answers.owner,
+        state: answers.state,
+        estimate: answers.estimate,
+        actuals: answers.actuals
       })
-      .catch(err => console.log(err))
-    }
-
-    getBacklogItem(artifactId).then((artifact) => {
-      let email
-      try {
-        email = getEmail()
-      } catch (err) {
-        console.log('Failed to get current user email. Create a task without the owner')
-        create(artifact)
-      }
-
-      getUserByEmail(email).then((user) => {
-        create(artifact, user)
-      })
+    }).then((taskInfo) => {
+      printTasks(taskInfo.Object.WorkProduct.FormattedID)
+    }).catch(e => {
+      console.log(e)
     })
   })
 
