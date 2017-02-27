@@ -15,9 +15,9 @@
   - [ca api \[api key\]](#ca-api-api-key)
   - [ca open](#ca-open)
 - [Tasks](#tasks)
-  - [ca task list](#ca-task-list-formatted-id)
+  - [ca task list](#ca-task-list)
   - [ca task update \[formatted ID\] \[status\] \[actuals\]](#ca-task-update-formatted-id-status-actuals)
-  - [ca task new](#ca-task-new-formatted-storydefect-id-taskname-state-estimate-actuals)
+  - [ca task new](#ca-task-new)
 - [License](#license)
 
 ## Installation

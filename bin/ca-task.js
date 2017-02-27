@@ -13,6 +13,7 @@ const getUserByEmail = require('../lib/get-user-by-email')
 const updateTask = require('../lib/update-task')
 const getArtifact = require('../lib/get-artifact')
 const promtForArtifactId = require('../lib/promt-for-artifact-id')
+const promtForTaskInfo = require('../lib/promt-for-task-info')
 const inquirer = require('inquirer')
 
 program
@@ -49,56 +50,7 @@ program
         fetch: ['UserName', 'FirstName', 'MiddleName', 'LastName', 'DisplayName', 'EmailAddress']
       })
     }).then(usersData => {
-      var users = usersData.Results
-      return inquirer.prompt([
-        {
-          type: 'input',
-          name: 'name',
-          message: 'Task name:',
-          default: 'Dev',
-          validate: value => {
-            return value.trim() ? true : 'Please enter a valid task name'
-          }
-        },
-        {
-          type: 'list',
-          name: 'owner',
-          message: 'Task owner:',
-          default: users.indexOf(users.find(u => u.EmailAddress === email)),
-          choices: users.map(u => {
-            return {
-              name: u._refObjectName,
-              value: u._ref,
-              checked: u.EmailAddress === email
-            }
-          })
-        },
-        {
-          type: 'list',
-          name: 'state',
-          message: 'Task state:',
-          choices: ['Defined', 'In-Progress', 'Completed'],
-          default: 0
-        },
-        {
-          type: 'input',
-          name: 'estimate',
-          message: 'Task estimate:',
-          default: 0.5,
-          filter: function (value) {
-            return parseFloat(value) || 0
-          }
-        },
-        {
-          type: 'input',
-          name: 'actuals',
-          message: 'Task actuals:',
-          default: 0,
-          filter: function (value) {
-            return parseFloat(value) || 0
-          }
-        }
-      ])
+      return inquirer.prompt(promtForTaskInfo({users: usersData.Results, email: email}))
     }).then(answers => {
       return createTask({
         name: answers.name,

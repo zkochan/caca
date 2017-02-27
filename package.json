@@ -43,9 +43,11 @@
   "homepage": "https://github.com/zkochan/caca#readme",
   "dependencies": {
     "better-console": "^0.2.4",
+    "chalk": "^1.1.3",
     "cli-table2": "^0.2.0",
     "commander": "^2.9.0",
     "configstore": "^1.4.0",
+    "copy-paste": "^1.3.0",
     "current-story": "^1.0.0",
     "git-repo-name": "^0.6.0",
     "git-user-email": "^0.2.1",
