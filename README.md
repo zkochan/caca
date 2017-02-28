@@ -16,7 +16,7 @@
   - [ca open](#ca-open)
 - [Tasks](#tasks)
   - [ca task list](#ca-task-list)
-  - [ca task update \[formatted ID\] \[status\] \[actuals\]](#ca-task-update-formatted-id-status-actuals)
+  - [ca task update](#ca-task-update)
   - [ca task new](#ca-task-new)
 - [License](#license)
 
@@ -67,10 +67,9 @@ $ ca task --help
 
   Commands:
 
-    list|ls [formattedId]                                     Prints the list of tasks of the story/defect
-    new [artifactId] [taskName] [state] [estimate] [actuals]  Adds a new task to a story/defect
-    new-merge [taskPrefix]                                    Adds a new merge task to a story/defect
-    update [formattedId] [status] [actuals]                   Updates status and actuals of the task
+    list|ls Prints the list of tasks of the story/defect
+    new     Adds a new task to a story/defect
+    update  Updates status and actuals of the task
 
   Options:
 
@@ -97,14 +96,9 @@ Opens the Rally story/defect in the browser based on git branch name or user inp
 
 Prints out list of tasks added to the Rally story/defect in the CLI
 
-### `ca task update [formatted ID] [status] [actuals]`
+### `ca task update`
 
-Updates status and actuals of the task
-Possible [status] options:
-
-- d - defined
-- p - In-Progress
-- c - Completed
+Updates task info
 
 **Usage example**
 
