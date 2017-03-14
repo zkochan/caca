@@ -60,28 +60,31 @@ program
 program
   .command('open')
   .description('Opens the specified defect or story')
-  .action(() => {
-    currentStory().then(id => {
-      return inquirer.prompt([promtForArtifactId(id)])
-    }).then(answers => {
-      answers.id && openStory(answers.id)
-    })
+  .option('-i, --interactive', 'Enables UI to enter custom item ID')
+  .action((cmd) => {
+    const action = cmd.interactive
+      ? inquirer.prompt([promtForArtifactId()]).then(answers => answers.id)
+      : currentStory()
+    action.then(id => openStory(id))
   })
 
 program
     .command('skype')
     .description('Prepares skype message for you')
-    .action(() => {
+    .option('-i, --interactive', 'Enables UI to enter custom item ID')
+    .action(cmd => {
       let artifact
       let isDefect
       let intent
-      currentStory().then((id) => {
-        return inquirer.prompt([promtForArtifactId(id)])
-      }).then(answers => {
-        isDefect = answers.id.substr(0, 2).toUpperCase() === 'DE'
+      const action = cmd.interactive
+        ? inquirer.prompt([promtForArtifactId()]).then(answers => answers.id)
+        : currentStory()
+        
+      action.then(id => {
+        isDefect = id.substr(0, 2).toUpperCase() === 'DE'
         return getArtifact({
           type: isDefect ? 'defect' : 'hierarchicalrequirement',
-          query: queryUtils.where('FormattedID', '=', answers.id),
+          query: queryUtils.where('FormattedID', '=', id),
           fetch: [
             'Name',
             'FormattedID',
@@ -161,7 +164,7 @@ program
       if (!project) {
         const errMsg = `Please run ${chalk.bgGreen('ca settings')} and select the project`
         console.log(`${chalk.bgRed(errMsg)}`)
-        return 1
+        process.exit(1);
       }
 
       Promise.all([
