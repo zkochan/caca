@@ -5,7 +5,6 @@ const pkg = require('../package')
 const updateNotifier = require('update-notifier')
 const openStory = require('../lib/open-story')
 const currentStory = require('current-story')
-const getBacklogItem = require('../lib/get-backlog-item')
 const Configstore = require('configstore')
 const inquirer = require('inquirer')
 const conf = new Configstore('ca')
@@ -24,11 +23,38 @@ program
   .command('task', 'do something with tasks')
 
 program
-  .command('api [apiKey]')
-  .usage('[options]')
-  .description('Sets the CA API key')
+  .command('settings')
+  .description('Sets the CA API key and current project')
   .action(apiKey => {
-    conf.set('apiKey', apiKey)
+    inquirer.prompt({
+      type: 'input',
+      name: 'apiKey',
+      message: 'Your CA API key:',
+      default: conf.get('apiKey') || '',
+      validate: value => {
+        return value.trim() ? true : 'Please enter a valid API key'
+      }
+    }).then(answer => {
+      conf.set('apiKey', answer.apiKey)
+      return getArtifact({
+        type: 'Project'
+      })
+    }).then(projects => {
+      return inquirer.prompt({
+        type: 'list',
+        name: 'project',
+        message: 'Select your project:',
+        choices: projects.Results.map(p => {
+          return {
+            name: p._refObjectName,
+            value: p._ref
+          }
+        })
+      })
+    }).then((answer) => {
+      conf.set('project', answer.project)
+      console.log('Thank you. Settings were successfully updated')
+    })
   })
 
 program
@@ -127,26 +153,29 @@ program
     .command('iteration')
     .description('Opens the list of stories in current iteration')
     .action(() => {
-      let artifact
+      let currentStoryFormattedId
       let iteration
       let iterationArtifacts
-      var date = new Date().toISOString()
+      const date = new Date().toISOString()
+      const project = conf.get('project')
+      if (!project) {
+        const errMsg = `Please run ${chalk.bgGreen('ca settings')} and select the project`
+        console.log(`${chalk.bgRed(errMsg)}`)
+        return 1
+      }
 
-      Promise.all([currentStory()]).then((values) => {
-        return inquirer.prompt([promtForArtifactId(values[0])])
-      }).then(answers => {
-        return getBacklogItem(answers.id)
-      }).then(_artifact => {
-        artifact = _artifact
-        return getArtifact({
+      Promise.all([
+        currentStory(),
+        getArtifact({
           type: 'Iteration',
           query: queryUtils
-                .where('StartDate', '<=', date)
-                .and('EndDate', '>=', date)
-                .and('Project', '=', artifact.Project)
+                  .where('StartDate', '<=', date)
+                  .and('EndDate', '>=', date)
+                  .and('Project', '=', project)
         })
-      }).then(iterationResults => {
-        iteration = iterationResults.Results[0]
+      ]).then(values => {
+        iteration = values[1].Results[0]
+        currentStoryFormattedId = values[0]
         console.log(`${iteration.Project.Name} ${chalk.bgGreen(iteration.Name)}`)
         return getArtifact({
           type: 'hierarchicalrequirement',
@@ -163,12 +192,13 @@ program
         })
       }).then(res => {
         iterationArtifacts = res.Results
+        const defaultItem = iterationArtifacts.find(a => { return a.FormattedID === currentStoryFormattedId })
         return inquirer.prompt([
           {
             type: 'list',
             name: 'ref',
             message: 'Item:',
-            default: iterationArtifacts.find(a => { return a.FormattedID === artifact.FormattedID }),
+            default: defaultItem ? defaultItem._ref : '',
             choices: iterationArtifacts.map(a => {
               return {
                 name: `${a.FormattedID}. ${a.Name}`,

@@ -12,7 +12,7 @@
 - [Available commands](#available-commands)
   - [ca --help](#ca---help)
   - [ca task --help](#ca-task---help)
-  - [ca api \[api key\]](#ca-api-api-key)
+  - [ca settings](#ca-settings)
   - [ca open](#ca-open)
 - [Tasks](#tasks)
   - [ca task list](#ca-task-list)
@@ -42,10 +42,10 @@ $ ca --help
 
   Commands:
 
-    task          do something with tasks
-    api [apiKey]  Sets the CA API key
-    open          Opens the specified defect or story
-    help [cmd]    display help for [cmd]
+    task        do something with tasks
+    settings    Sets the CA API key and current project
+    open        Opens the specified defect or story
+    help [cmd]  display help for [cmd]
 
   Options:
 
@@ -76,9 +76,10 @@ $ ca task --help
     -h, --help  output usage information
 ```
 
-### `ca api [api key]`
+### `ca settings`
 
 Sets the API key that will be used to communicate with Rally. Other commands won't work without an API key.
+Sets the current project that is used in some other commands (e.g. `ca iteration`)
 
 **Usage example**
 

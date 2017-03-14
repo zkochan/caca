@@ -88,7 +88,6 @@ program
       })
     }).then(usersData => {
       users = usersData.Results
-      // defaults.owner || defaults.users.indexOf(defaults.users.find(u => u.EmailAddress === defaults.email))
       return inquirer.prompt([{
         type: 'list',
         name: '_ref',
