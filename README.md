@@ -14,6 +14,7 @@
   - [ca task --help](#ca-task---help)
   - [ca settings](#ca-settings)
   - [ca open](#ca-open)
+  - [ca skype](#ca-skype)
 - [Tasks](#tasks)
   - [ca task list](#ca-task-list)
   - [ca task update](#ca-task-update)
@@ -90,6 +91,40 @@ $ ca api _023djief03fh34ASjfwe0f2jASojsasf0
 ### `ca open`
 
 Opens the Rally story/defect in the browser based on git branch name or user input.
+
+**Usage example**
+
+```sh
+$ ca open --help
+
+  Usage: open [options]
+
+  Opens the specified defect or story
+
+  Options:
+
+    -h, --help         output usage information
+    -i, --interactive  Enables UI to enter custom item ID
+```
+
+### `ca skype`
+
+Prepares skype message for you
+
+**Usage example**
+
+```sh
+$ ca skype --help
+
+  Usage: skype [options]
+
+  Prepares skype message for you
+
+  Options:
+
+    -h, --help         output usage information
+    -i, --interactive  Enables UI to enter custom item ID
+```
 
 ## Tasks
 

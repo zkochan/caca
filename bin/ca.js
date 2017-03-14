@@ -79,7 +79,7 @@ program
       const action = cmd.interactive
         ? inquirer.prompt([promtForArtifactId()]).then(answers => answers.id)
         : currentStory()
-        
+
       action.then(id => {
         isDefect = id.substr(0, 2).toUpperCase() === 'DE'
         return getArtifact({
@@ -164,7 +164,7 @@ program
       if (!project) {
         const errMsg = `Please run ${chalk.bgGreen('ca settings')} and select the project`
         console.log(`${chalk.bgRed(errMsg)}`)
-        process.exit(1);
+        process.exit(1)
       }
 
       Promise.all([
