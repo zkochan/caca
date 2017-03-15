@@ -132,6 +132,21 @@ $ ca skype --help
 
 Prints out list of tasks added to the Rally story/defect in the CLI
 
+**Usage example**
+
+```sh
+$ ca task list --help
+
+  Usage: list|ls [options]
+
+  Prints the list of tasks of the story/defect
+
+  Options:
+
+    -h, --help         output usage information
+    -i, --interactive  Enables UI to enter custom item ID
+```
+
 ### `ca task update`
 
 Updates task info
@@ -139,12 +154,36 @@ Updates task info
 **Usage example**
 
 ```sh
-$ ca task update TA95062 c 2
+$ ca task update --help
+
+  Usage: update [options]
+
+  Updates status and actuals of the task
+
+  Options:
+
+    -h, --help         output usage information
+    -i, --interactive  Enables UI to enter custom item ID
 ```
 
 ### `ca task new`
 
 Adds a new task to a story/defect and prints the list of tasks after new one was created. Asks for task details (name, state, actuals, owner) in step-by-step process
+
+**Usage example**
+
+```sh
+$ ca task new --help
+
+  Usage: new [options]
+
+  Adds a new task to a story/defect
+
+  Options:
+
+    -h, --help         output usage information
+    -i, --interactive  Enables UI to enter custom item ID
+```
 
 ## License
 

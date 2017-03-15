@@ -17,28 +17,35 @@ program
   .command('list')
   .alias('ls')
   .description('Prints the list of tasks of the story/defect')
-  .action(() => {
-    currentStory().then(defaultId => {
-      return inquirer.prompt([promtForArtifactId(defaultId)])
-    }).then(answers => {
-      answers.id && printTasks(answers.id)
-    }).catch(e => {
-      console.log(e)
-    })
+  .option('-i, --interactive', 'Enables UI to enter custom item ID')
+  .action((cmd) => {
+    const action = cmd.interactive
+      ? inquirer.prompt([promtForArtifactId()]).then(answers => answers.id)
+      : currentStory()
+
+    action
+      .then(id => printTasks(id))
   })
 
 program
   .command('new')
   .description('Adds a new task to a story/defect')
-  .action(() => {
+  .option('-i, --interactive', 'Enables UI to enter custom item ID')
+  .action((cmd) => {
     let artifact
     let email
+    let formattedId
 
-    Promise.all([currentStory(), getEmail()]).then((values) => {
-      email = values[1]
-      return inquirer.prompt([promtForArtifactId(values[0])])
-    }).then(answers => {
-      return getBacklogItem(answers.id)
+    const action = cmd.interactive
+      ? inquirer.prompt([promtForArtifactId()]).then(answers => answers.id)
+      : currentStory()
+
+    action.then(id => {
+      formattedId = id
+      return getEmail()
+    }).then(_email => {
+      email = _email
+      return getBacklogItem(formattedId)
     }).then(_artifact => {
       artifact = _artifact
       return getArtifact({
@@ -69,16 +76,24 @@ program
 program
   .command('update')
   .description('Updates status and actuals of the task')
-  .action(() => {
+  .option('-i, --interactive', 'Enables UI to enter custom item ID')
+  .action((cmd) => {
     let email
     let artifact
     let users
     let task
-    Promise.all([currentStory(), getEmail()]).then((values) => {
-      email = values[1]
-      return inquirer.prompt([promtForArtifactId(values[0])])
-    }).then(answers => {
-      return getArtifactWithTasks(answers.id)
+    let formattedId
+
+    const action = cmd.interactive
+      ? inquirer.prompt([promtForArtifactId()]).then(answers => answers.id)
+      : currentStory()
+
+    action.then(id => {
+      formattedId = id
+      return getEmail()
+    }).then(_email => {
+      email = _email
+      return getArtifactWithTasks(formattedId)
     }).then(artifactWithTasks => {
       artifact = artifactWithTasks
       return getArtifact({
