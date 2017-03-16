@@ -9,6 +9,8 @@ const Configstore = require('configstore')
 const inquirer = require('inquirer')
 const conf = new Configstore('ca')
 const promtForArtifactId = require('../lib/promt-for-artifact-id')
+const updateArtifact = require('../lib/update-artifact')
+const getBacklogItemUrl = require('../lib/get-backlog-item-url')
 const rally = require('rally')
 const getArtifact = require('../lib/get-artifact')
 const chalk = require('chalk')
@@ -129,9 +131,7 @@ program
               default: 'SEO1'
             }])
         }).then(serverChoice => {
-          const url = 'https://rally1.rallydev.com/#/' + artifact.Project.ObjectID +
-                '/detail/' + (isDefect ? 'defect' : 'userstory') +
-                '/' + artifact.ObjectID
+          const url = getBacklogItemUrl(artifact)
           let message = `(*) ${artifact.FormattedID}. ${artifact.Name} \n`
           switch (intent) {
             case 'CR':
@@ -181,7 +181,7 @@ program
         currentStoryFormattedId = values[0]
         console.log(`${iteration.Project.Name} ${chalk.bgGreen(iteration.Name)}`)
         return getArtifact({
-          type: 'hierarchicalrequirement',
+          type: 'SchedulableArtifact',
           query: queryUtils.where('Iteration.ObjectID', '=', iteration.ObjectID),
           fetch: [
             'Name',
@@ -214,5 +214,63 @@ program
         openStory(item.FormattedID)
       })
     })
+
+program
+  .command('grab')
+  .description('Puts the story into the current iteration')
+  .option('-i, --interactive', 'Enables UI to enter custom item ID')
+  .action((cmd) => {
+    const project = conf.get('project')
+    let backlogItem
+    let iteration
+    if (!project) {
+      const errMsg = `Please run ${chalk.bgGreen('ca settings')} and select the project`
+      console.log(`${chalk.bgRed(errMsg)}`)
+      process.exit(1)
+    }
+
+    const action = cmd.interactive
+      ? inquirer.prompt([promtForArtifactId()]).then(answers => answers.id)
+      : currentStory()
+
+    action.then(id => {
+      const isDefect = id.substr(0, 2).toUpperCase() === 'DE'
+      return getArtifact({
+        type: isDefect ? 'defect' : 'hierarchicalrequirement',
+        query: queryUtils.where('FormattedID', '=', id),
+        fetch: [
+          'Name',
+          'FormattedID',
+          'Project',
+          'ObjectID',
+          'Iteration',
+          'FormattedID',
+          'c_BranchName'
+        ]
+      })
+    }).then(_backlogItems => {
+      backlogItem = _backlogItems.Results[0]
+      const date = new Date().toISOString()
+
+      return getArtifact({
+        type: 'Iteration',
+        query: queryUtils
+                .where('StartDate', '<=', date)
+                .and('EndDate', '>=', date)
+                .and('Project', '=', project)
+      })
+    }).then(iterationRes => {
+      iteration = iterationRes.Results[0]
+      return updateArtifact({
+        ref: backlogItem._ref,
+        data: {
+          Iteration: iteration._ref
+        }
+      })
+    }).then(data => {
+      const url = getBacklogItemUrl(backlogItem)
+      console.log(`${chalk.bgGreen(data.Object.FormattedID, '.', data.Object.Name)} added to the ${chalk.bgBlue(iteration.Name)}. \nDetails: ${url}`)
+    })
+  })
 
 program.parse(process.argv)

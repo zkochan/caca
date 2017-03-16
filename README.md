@@ -14,6 +14,7 @@
   - [ca task --help](#ca-task---help)
   - [ca settings](#ca-settings)
   - [ca open](#ca-open)
+  - [ca grab](#ca-grab)
   - [ca skype](#ca-skype)
 - [Tasks](#tasks)
   - [ca task list](#ca-task-list)
@@ -100,6 +101,25 @@ $ ca open --help
   Usage: open [options]
 
   Opens the specified defect or story
+
+  Options:
+
+    -h, --help         output usage information
+    -i, --interactive  Enables UI to enter custom item ID
+```
+
+### `ca grab`
+
+Puts the backlog item into the current iteration
+
+**Usage example**
+
+```sh
+$ ca grab --help
+
+  Usage: grab [options]
+
+  Puts the story into the current iteration
 
   Options:
 
